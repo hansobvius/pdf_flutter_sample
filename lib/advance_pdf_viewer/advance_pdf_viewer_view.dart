@@ -79,7 +79,8 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   _fetch(String path) async {
-    File file = File(path);
+    String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
+    File file = await File(path + "/" + filename).create(recursive: true);
     PDFDocument doc = await PDFDocument.fromFile(file);
     setState(() {
       _document = doc..preloadPages();
