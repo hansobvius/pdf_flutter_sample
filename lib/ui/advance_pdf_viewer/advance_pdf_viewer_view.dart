@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_samples/core/download_util.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 
 class AdvancePdfViewerView extends StatefulWidget {
@@ -16,6 +15,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   PDFDocument _document;
   PageController _pageController = PageController();
+  bool _isFailure = false;
 
   String pdf1 = 'https://componentsdev.edtech.com.br/api/files-api/v1/AzFiles/html/BancoDoBrasilV5/Conteudo/Certificados/Usuarios/226420/certificado-orientacao-profissional-autoconhecimento.pdf';
   String pdf2 = 'http://conorlastowka.com/book/CitationNeededBook-Sample.pdf';
@@ -28,47 +28,22 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
     downloadFileFromUrl(pdf1);
   }
 
-  Future<bool> _checkPermission() async {
-    if (Platform.isAndroid) {
-      final status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        final result = await Permission.storage.request();
-        if (result == PermissionStatus.granted) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-    return false;
-  }
-
   Future downloadFileFromUrl(String url) async {
 
     String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
-
-    bool isSuccess;
-
-    bool verifyPermission = await _checkPermission();
-
-    if (!verifyPermission) {
-      return;
-    }
 
     await downloadFile(
         url: url,
         filename: filename,
         isPrivate: true,
         onSuccess: (success, path) => {
-          isSuccess = true,
+          _isFailure = !success,
           print('downloadFileFromUrl SUCCESS $success $path'),
           _fetch(path),
         },
         onError: (error) => {
-          isSuccess = false,
-          print('downloadFileFromUrl SUCCESS $isSuccess $error')
+          _isFailure = true,
+          print('downloadFileFromUrl FAILURE $_isFailure $error')
         }
     );
   }
@@ -89,21 +64,32 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
         title: Text('Advance PDF Viewer')
       ),
       body: Center(
-        child: _document == null
-            ? Container(
-              child: CircularProgressIndicator(),
-            )
-             : PDFViewer(
-                 document: _document,
-                 zoomSteps: 1,
-                 showPicker: true,
-                 lazyLoad: false,
-                 controller: _pageController,
-                 onPageChanged: (page) {
+        child: Builder(
+          builder: (BuildContext context) {
+            if (_document != null) {
+              return PDFViewer(
+                document: _document,
+                zoomSteps: 1,
+                showPicker: true,
+                lazyLoad: false,
+                controller: _pageController,
+                onPageChanged: (page) {
                   print('PDF PAGE CHANGED $page');
-           },
-         )
-      ),
+                },
+              );
+            }
+            if(_isFailure) {
+              return Container(
+                child: Center(
+                  child: Text('PDF unavailable!'),
+                )
+              );
+            }
+            return Container(
+                child: CircularProgressIndicator(),
+            );
+          }
+      ))
     );
   }
 }
