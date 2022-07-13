@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf_samples/core/download_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../download_util.dart';
 
 class AdvancePdfViewerView extends StatefulWidget {
 
