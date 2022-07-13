@@ -58,16 +58,11 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   String _generateFilename(String fullUrl) {
-
     String split = fullUrl.split('/').last;
-
-    print('FILENAME $split');
-
-    String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
-
+    String filename = removeSpecialChar(split).toLowerCase().replaceAll(" ", "");
+    print('FILENAME $filename');
     return filename;
   }
-
 
   @override
   Widget build(BuildContext context) {
