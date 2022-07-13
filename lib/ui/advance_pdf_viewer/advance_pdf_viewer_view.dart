@@ -30,7 +30,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   Future downloadFileFromUrl(String url) async {
 
-    String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
+    String filename = _generateFilename(url);
 
     await downloadFile(
         url: url,
@@ -49,13 +49,25 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   _fetch(String path) async {
-    String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
-    File file = await File(path + "/" + filename).create(recursive: true);
+
+    File file = await File(path + "/" + _generateFilename(pdf1)).create(recursive: true);
     PDFDocument doc = await PDFDocument.fromFile(file);
     setState(() {
       _document = doc..preloadPages();
     });
   }
+
+  String _generateFilename(String fullUrl) {
+
+    String split = fullUrl.split('/').last;
+
+    print('FILENAME $split');
+
+    String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
+
+    return filename;
+  }
+
 
   @override
   Widget build(BuildContext context) {
