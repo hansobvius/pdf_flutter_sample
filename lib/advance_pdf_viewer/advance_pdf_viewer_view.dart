@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../download_util.dart';
@@ -46,13 +45,9 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
     return false;
   }
 
-
-
   Future downloadFileFromUrl(String url) async {
 
     String filename = removeSpecialChar('certificado').toLowerCase().replaceAll(" ", "") + ".pdf";
-
-    print('downloadFileFromUrl');
 
     bool isSuccess;
 
@@ -68,12 +63,12 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
         isPrivate: true,
         onSuccess: (success, path) => {
           isSuccess = true,
-          print('downloadFileFromUrl SUCCESS $path'),
+          print('downloadFileFromUrl SUCCESS $success $path'),
           _fetch(path),
         },
         onError: (error) => {
           isSuccess = false,
-          print('downloadFileFromUrl ERROR')
+          print('downloadFileFromUrl SUCCESS $isSuccess $error')
         }
     );
   }
