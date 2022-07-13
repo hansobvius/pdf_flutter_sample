@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:share/share.dart';
 
+
+
 Future<bool> _checkPermission() async {
   if (Platform.isAndroid) {
     final status = await Permission.storage.status;
@@ -146,3 +148,30 @@ Future<double> getTotalFileSize(String path) async {
 
 Future _deleteCachedFile(String key, {CacheManager cacheManager}) async =>
   await (cacheManager ?? DefaultCacheManager()).removeFile(key);
+
+String removeSpecialChar(String str) {
+  str = str.replaceAll('á', 'a');
+  str = str.replaceAll('à', 'a');
+  str = str.replaceAll('ã', 'a');
+  str = str.replaceAll('â', 'a');
+  str = str.replaceAll('ä', 'a');
+  str = str.replaceAll('é', 'e');
+  str = str.replaceAll('è', 'e');
+  str = str.replaceAll('ê', 'e');
+  str = str.replaceAll('ë', 'e');
+  str = str.replaceAll('í', 'i');
+  str = str.replaceAll('ì', 'i');
+  str = str.replaceAll('î', 'i');
+  str = str.replaceAll('ï', 'i');
+  str = str.replaceAll('ó', 'o');
+  str = str.replaceAll('ò', 'o');
+  str = str.replaceAll('õ', 'o');
+  str = str.replaceAll('ô', 'o');
+  str = str.replaceAll('ö', 'o');
+  str = str.replaceAll('ú', 'u');
+  str = str.replaceAll('ù', 'u');
+  str = str.replaceAll('û', 'u');
+  str = str.replaceAll('ü', 'u');
+  str = str.replaceAll('ç', 'c');
+  return str;
+}
