@@ -1,0 +1,61 @@
+PODS:
+  - advance_pdf_viewer (1.0.5):
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_share (0.0.1):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - path_provider (0.0.1):
+    - Flutter
+  - pdf_viewer_plugin (0.0.1):
+    - Flutter
+  - "permission_handler (5.1.0+2)":
+    - Flutter
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
+
+DEPENDENCIES:
+  - advance_pdf_viewer (from `.symlinks/plugins/advance_pdf_viewer/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - pdf_viewer_plugin (from `.symlinks/plugins/pdf_viewer_plugin/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+
+EXTERNAL SOURCES:
+  advance_pdf_viewer:
+    :path: ".symlinks/plugins/advance_pdf_viewer/ios"
+  Flutter:
+    :path: Flutter
+  flutter_share:
+    :path: ".symlinks/plugins/flutter_share/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  pdf_viewer_plugin:
+    :path: ".symlinks/plugins/pdf_viewer_plugin/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+
+SPEC CHECKSUMS:
+  advance_pdf_viewer: 5c832f382b4ca84fe735f893b7e91aa830c27d7b
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  pdf_viewer_plugin: 45fc2233c590780ca0ca623a1f575e4bd0a72b3a
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.10.2
