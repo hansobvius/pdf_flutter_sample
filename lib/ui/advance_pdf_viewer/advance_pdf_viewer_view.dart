@@ -71,9 +71,14 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   Future shareFile() async {
+    String fileTitle = pdf1
+        .split('/').last
+        .split('.').first
+        .replaceAll('_', ' ')
+        .replaceAll('-', ' ');
     File file = File(_path + "/" + _generateFilename(pdf1));
     await FlutterShare.shareFile(
-      title: pdf1.split('/')[0],
+      title: pdf1.split('/').last,
       text: 'Example share text',
       fileType: '.pdf',
       filePath: file.path,

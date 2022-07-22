@@ -13,7 +13,7 @@ class _TestTestState extends State<TestTest> {
   bool _booleanValue = false;
 
   _action() {
-    _booleanValue = !_booleanValue;
+    setState(() => _booleanValue = !_booleanValue);
   }
 
   @override
