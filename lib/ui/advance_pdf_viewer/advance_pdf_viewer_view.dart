@@ -20,6 +20,8 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   final String pdf2 = 'https://appatena.atenalms.com.br/certificadoflash/modelo.asp?chave=391B70497F0CECE291C5C571114221103799F2B9249CA5EC2726B015F23F51E3FDD2BF47204DCFD154F371F890';
   final PageController _pageController = PageController();
 
+  // final PdfViewModel _pdfViewModel = PdfViewModel(this.AdvancePdfViewerView());
+
   bool _isFailure = false;
 
   String _path;
@@ -28,7 +30,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   @override
   void initState() {
     super.initState();
-    downloadFileFromUrl(pdf2, true);
+    downloadFileFromUrl(pdf1, true);
   }
 
   void rebuild() {
@@ -59,7 +61,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   _fetch(String path) async {
-    File file = await File(path + "/" + _generateFilename(pdf2)).create(recursive: true);
+    File file = await File(path + "/" + _generateFilename(pdf1)).create(recursive: true);
     PDFDocument doc = await PDFDocument.fromFile(file);
     setState(() {
       _document = doc..preloadPages();
@@ -81,12 +83,12 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   Future shareFile() async {
-    String fileTitle = pdf2
+    String fileTitle = pdf1
         .split('/').last
         .split('.').first
         .replaceAll('_', ' ')
         .replaceAll('-', ' ');
-    File file = File(_path + "/" + _generateFilename(pdf2));
+    File file = File(_path + "/" + _generateFilename(pdf1));
     print('FILE_SHARE ${file.toString()}');
     await FlutterShare.shareFile(
       title: fileTitle,
@@ -97,7 +99,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   Future _downloadFile() async {
-    downloadFileFromUrl(pdf2, false);
+    downloadFileFromUrl(pdf1, false);
   }
 
   @override
@@ -144,7 +146,6 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   @override
   void dispose() {
-    PdfViewModel().instance.dispose();
     super.dispose();
   }
 }

@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'package:pdf_samples/core/download_util.dart';
 
-class PdfViewModel {
+part 'pdf_view_model.g.dart';
 
-  final PdfViewModel instance = PdfViewModel();
-  PdfViewModel get pdfViewModel => this.instance;
+class PdfViewModel = PdfViewModelState with _$PdfViewModel;
 
-  PDFDocument _document;
-  PDFDocument get pdfDocument => _document;
+abstract class PdfViewModelState with Store {
+
 
   File _file;
   File get file => _file;
@@ -24,9 +24,15 @@ class PdfViewModel {
   String _filename = '';
   String get filename => _filename;
 
+  @observable
+  PDFDocument _document;
+  PDFDocument get pdfDocument => _document;
+
+  @observable
   bool _isFailure = false;
   bool get isFailure => _isFailure;
 
+  @action
   Future openPdfFile(String url) async {
     _url = url;
     _file = await File(path + "/" + _generateFilename(_url)).create(recursive: true);
@@ -62,7 +68,9 @@ class PdfViewModel {
   }
 
   Future fetch(String url, String path, Function(PDFDocument doc) pdfDocument) async =>
-      await _fetch(url, path, (document) => pdfDocument(document));
+      await _fetch(url, path, (document) {
+        pdfDocument(document);
+      });
 
   String _generateFilename(String fullUrl) {
     String split = fullUrl.split('/').last;
