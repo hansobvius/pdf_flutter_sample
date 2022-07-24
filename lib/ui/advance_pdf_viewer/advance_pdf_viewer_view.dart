@@ -15,6 +15,7 @@ class AdvancePdfViewerView extends StatefulWidget {
 class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   final String pdf1 = 'https://componentsdev.edtech.com.br/api/files-api/v1/AzFiles/html/BancoDoBrasilV5/Conteudo/Certificados/Usuarios/226420/certificado-orientacao-profissional-autoconhecimento.pdf';
+  final String pdf2 = 'https://appatena.atenalms.com.br/certificadoflash/modelo.asp?chave=391B70497F0CECE291C5C571114221103799F2B9249CA5EC2726B015F23F51E3FDD2BF47204DCFD154F371F890';
   final PageController _pageController = PageController();
 
   bool _isFailure = false;
@@ -26,7 +27,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   @override
   void initState() {
     super.initState();
-    downloadFileFromUrl(pdf1);
+    downloadFileFromUrl(pdf2);
   }
 
   Future downloadFileFromUrl(String url) async {
@@ -51,7 +52,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   _fetch(String path) async {
-    File file = await File(path + "/" + _generateFilename(pdf1)).create(recursive: true);
+    File file = await File(path + "/" + _generateFilename(pdf2)).create(recursive: true);
     PDFDocument doc = await PDFDocument.fromFile(file);
     setState(() {
       _document = doc..preloadPages();
@@ -60,29 +61,35 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   String _generateFilename(String fullUrl) {
     String split = fullUrl.split('/').last;
-    String filename = removeSpecialChar(split).toLowerCase().replaceAll(" ", "");
+    String filename = removeSpecialChar(split).toLowerCase().replaceAll(" ", "").split('.')[0] + '.pdf';
     print('FILENAME $filename');
     return filename;
   }
 
   Future _shareFile() async {
     print('PRINT FILE');
-    await shareFile();
+    if(Platform.isAndroid) {
+      _downloadFile();
+    } else await shareFile();
   }
 
   Future shareFile() async {
-    String fileTitle = pdf1
+    String fileTitle = pdf2
         .split('/').last
         .split('.').first
         .replaceAll('_', ' ')
         .replaceAll('-', ' ');
-    File file = File(_path + "/" + _generateFilename(pdf1));
+    File file = File(_path + "/" + _generateFilename(pdf2));
+    print('FILE_SHARE ${file.toString()}');
     await FlutterShare.shareFile(
-      title: pdf1.split('/').last,
+      title: fileTitle,
       text: 'Example share text',
       fileType: '.pdf',
       filePath: file.path,
     );
+  }
+
+  Future _downloadFile() async {
   }
 
   @override
