@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:pdf_samples/core/download_util.dart';
 
@@ -109,13 +110,13 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
         title: Text('Advance PDF Viewer'),
         actions: [
           IconButton(
-              icon: Icon(Icons.share_outlined),
+              icon: Icon(Icons.file_download),
               onPressed: _shareFile
           )
         ]
       ),
       body: Center(
-        child: Builder(
+        child: Observer(
           builder: (BuildContext context) {
             if (_document != null) {
               return PDFViewer(
