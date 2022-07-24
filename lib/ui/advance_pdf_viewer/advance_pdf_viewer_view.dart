@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:pdf_samples/core/download_util.dart';
 
+import 'pdf_view_model.dart';
+
 
 class AdvancePdfViewerView extends StatefulWidget {
 
@@ -23,21 +25,26 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   String _path;
   PDFDocument _document;
 
-
   @override
   void initState() {
     super.initState();
-    downloadFileFromUrl(pdf2);
+    downloadFileFromUrl(pdf2, true);
   }
 
-  Future downloadFileFromUrl(String url) async {
+  void rebuild() {
+    this.setState(() {
+      print('STATE REBUILD');
+    });
+  }
+
+  Future downloadFileFromUrl(String url, bool isPrivate) async {
 
     String filename = _generateFilename(url);
 
     await downloadFile(
         url: url,
         filename: filename,
-        isPrivate: true,
+        isPrivate: isPrivate,
         onSuccess: (success, path) => {
           _isFailure = !success,
           _path = path,
@@ -90,6 +97,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   }
 
   Future _downloadFile() async {
+    downloadFileFromUrl(pdf2, false);
   }
 
   @override
@@ -132,5 +140,11 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
           }
       ))
     );
+  }
+
+  @override
+  void dispose() {
+    PdfViewModel().instance.dispose();
+    super.dispose();
   }
 }

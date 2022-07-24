@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -61,12 +62,27 @@ Future<String> _findLocalPath() async =>
 Future<String> _pathGenerator(bool isPrivate) async =>
     isPrivate ? await _findLocalPath() : await _findPublicPath();
 
-Future executeFileRecord(File file, bool isPrivate, Uint8List readContent) async {
-  // if(Platform.isIOS && !isPrivate) {
-  //   await file.delete();
-  //   return await Share.shareFiles([file.path]);
-  // }
+Future executeFileRecord(File file, bool isPrivate, Uint8List readContent, [String url]) async {
+  if(Platform.isIOS && !isPrivate) {
+    return await _shareFile(url ?? '', file);
+  }
   return await file.writeAsBytes(readContent);
+}
+
+Future _shareFile(String title, File file) async {
+  String fileTitle = title
+      .split('/').last
+      .split('.').first
+      .replaceAll('_', ' ')
+      .replaceAll('-', ' ');
+  // File file = File(file.path + "/" + _generateFilename(pdf2));
+  print('FILE_SHARE ${file.toString()}');
+  await FlutterShare.shareFile(
+    title: fileTitle,
+    text: 'Example share text',
+    fileType: '.pdf',
+    filePath: file.path,
+  );
 }
 
 /// Metodo usado no momento para download de conteúdos de midia para plataforma IOS e para download/compartilhamento de certificados
