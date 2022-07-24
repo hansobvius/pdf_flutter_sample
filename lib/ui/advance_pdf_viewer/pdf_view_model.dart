@@ -44,7 +44,7 @@ abstract class PdfViewModelState with Store {
     });
   }
 
-  /// download file to be share (only ios) or to be stored into local device files
+  /// download file to be share (only ios) or to be stored into local device document file
   Future downloadPdfFile(bool isPrivate) async {
     await _download(false);
   }

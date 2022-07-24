@@ -30,7 +30,12 @@ Future<bool> _checkPermission() async {
 
 Future<Directory> getApplicationDirectory() async => await getApplicationDocumentsDirectory();
 
-Future<File> _saveIntoCacheMemory(String url, {String keyName, Map<String, String> headers, CacheManager cacheManager, Function(bool isError) error}) async {
+Future<File> _saveIntoCacheMemory(
+    String url,
+    {String keyName,
+    Map<String, String> headers,
+    CacheManager cacheManager,
+    Function(bool isError) error}) async {
   File file;
   try {
     file = await (cacheManager ?? DefaultCacheManager())
@@ -69,24 +74,22 @@ Future executeFileRecord(File file, bool isPrivate, Uint8List readContent, [Stri
   return await file.writeAsBytes(readContent);
 }
 
-Future _shareFile(String title, File file) async {
-  String fileTitle = title
-      .split('/').last
-      .split('.').first
-      .replaceAll('_', ' ')
-      .replaceAll('-', ' ');
-  // File file = File(file.path + "/" + _generateFilename(pdf2));
-  print('FILE_SHARE ${file.toString()}');
+Future _shareFile(String uri, File fileContent) async {
   await FlutterShare.shareFile(
-    title: fileTitle,
+    title: fileContent.path,
     text: 'Example share text',
     fileType: '.pdf',
-    filePath: file.path,
+    filePath: fileContent.path,
   );
 }
 
 /// Metodo usado no momento para download de conteúdos de midia para plataforma IOS e para download/compartilhamento de certificados
-Future downloadFile({String url, Map<String, dynamic> header, String filename, bool isPrivate, Function(bool syccess, String path) onSuccess, Function(bool isError) onError}) async {
+Future downloadFile({String url,
+    Map<String, dynamic> header,
+    String filename,
+    bool isPrivate,
+    Function(bool syccess, String path) onSuccess,
+    Function(bool isError) onError}) async {
   var permissionReady = await _checkPermission();
   if(permissionReady) {
     var cachedFile = await _saveIntoCacheMemory(
