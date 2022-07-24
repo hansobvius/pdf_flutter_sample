@@ -11,7 +11,6 @@ class PdfViewModel = PdfViewModelState with _$PdfViewModel;
 
 abstract class PdfViewModelState with Store {
 
-
   File _file;
   File get file => _file;
 
@@ -32,16 +31,20 @@ abstract class PdfViewModelState with Store {
   bool _isFailure = false;
   bool get isFailure => _isFailure;
 
+  /// download file and initialize pdf document obj to be rendered
   @action
   Future openPdfFile(String url) async {
     _url = url;
-    _file = await File(path + "/" + _generateFilename(_url)).create(recursive: true);
-    _filename = _generateFilename(url);
+    _filename = _generateFilename(_url);
     await _download(true).whenComplete(() async {
-      await fetch(url, path, (doc) => _document = doc);
+      await fetch(
+          _url,
+          path,
+          (doc) => _document = doc);
     });
   }
 
+  /// download file to be share (only ios) or to be stored into local device files
   Future downloadPdfFile(bool isPrivate) async {
     await _download(false);
   }
@@ -63,7 +66,9 @@ abstract class PdfViewModelState with Store {
   }
 
   Future _fetch(String url, String path, Function(PDFDocument doc) document) async {
-    PDFDocument doc = await PDFDocument.fromFile(_file);
+    File file = await File(path + "/" + _generateFilename(url)).create(recursive: true);
+    _file = file;
+    PDFDocument doc = await PDFDocument.fromFile(_file)..preloadPages();
     document(doc);
   }
 
@@ -81,5 +86,6 @@ abstract class PdfViewModelState with Store {
 
   void dispose() async {
     await _file.delete();
+    _file = null;
   }
 }
