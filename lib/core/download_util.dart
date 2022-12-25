@@ -83,7 +83,6 @@ Future _shareFile(String uri, File fileContent) async {
   );
 }
 
-/// Metodo usado no momento para download de conteúdos de midia para plataforma IOS e para download/compartilhamento de certificados
 Future downloadFile({String url,
     Map<String, dynamic> header,
     String filename,
