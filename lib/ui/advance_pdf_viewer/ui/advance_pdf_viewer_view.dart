@@ -12,8 +12,8 @@ class AdvancePdfViewerView extends StatefulWidget {
 
 class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
-  final String pdf1 = 'https://componentsdev.edtech.com.br/api/files-api/v1/AzFiles/html/BancoDoBrasilV5/Conteudo/Certificados/Usuarios/226420/certificado-orientacao-profissional-autoconhecimento.pdf';
-  final String pdf2 = 'https://appatena.atenalms.com.br/certificadoflash/modelo.asp?chave=391B70497F0CECE291C5C571114221103799F2B9249CA5EC2726B015F23F51E3FDD2BF47204DCFD154F371F890';
+  /// Put a PDF valid url path
+  final String pdf = '';
 
   final PageController _pageController = PageController();
   final PdfViewModel _pdfViewModel = PdfViewModel();
@@ -21,7 +21,7 @@ class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
   @override
   void initState() {
     super.initState();
-    _pdfViewModel.openPdfFile(pdf1);
+    _pdfViewModel.openPdfFile(pdf);
   }
 
   @override
