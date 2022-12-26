@@ -71,7 +71,7 @@ class TestTestB extends StatefulWidget {
 
   final ReturnCallback<bool> callback;
 
-  TestTestB({this.callback});
+  TestTestB({@required this.callback});
 
   @override
   _TestTestStateB createState() => _TestTestStateB();

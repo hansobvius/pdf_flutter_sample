@@ -13,7 +13,7 @@ class AdvancePdfViewerView extends StatefulWidget {
 class _AdvancePdfViewerViewState extends State<AdvancePdfViewerView> {
 
   /// Put a PDF valid url path
-  final String pdf = '';
+  final String pdf = 'https://componentsdev.edtech.com.br/api/files-api/v1/AzFiles/html/BancoDoBrasilV5/Conteudo/Certificados/Usuarios/226420/certificado-orientacao-profissional-autoconhecimento.pdf';
 
   final PageController _pageController = PageController();
   final PdfViewModel _pdfViewModel = PdfViewModel();

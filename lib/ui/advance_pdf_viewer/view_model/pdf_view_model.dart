@@ -1,14 +1,20 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pdf_samples/core/download_util.dart';
+import 'package:pdf_samples/core/pdf_object.dart';
+import 'package:pdf_samples/worker/work_manager/work_manager.dart';
 
 part 'pdf_view_model.g.dart';
 
 class PdfViewModel = PdfViewModelState with _$PdfViewModel;
 
 abstract class PdfViewModelState with Store {
+
+  static const bool SUCCESS = true;
+  static const bool FAILURE = false;
 
   File _file;
   File get file => _file;
@@ -35,11 +41,11 @@ abstract class PdfViewModelState with Store {
   Future openPdfFile(String url) async {
     _url = url;
     _filename = _generateFilename(_url);
+
+    _download(true);
+
     await _download(true).whenComplete(() async {
-      await fetch(
-          _url,
-          path,
-          (doc) => _document = doc);
+
     });
   }
 
@@ -49,18 +55,41 @@ abstract class PdfViewModelState with Store {
   }
 
   Future _download(bool isPrivate) async {
-    await downloadFile(
-        url: _url,
-        filename: _filename,
-        isPrivate: isPrivate,
+
+    var worker = WorkerManager.instance;
+
+    var port = ReceivePort();
+    var pdfObject = PdfObject('PDF_SAMPLE', _url, _filename, isPrivate, port.sendPort);
+
+    worker.runIsolate(obj: pdfObject, fun: pdfRunnable);
+
+    port.listen((message) async {
+      if (message == SUCCESS) {
+        _path = pdfObject.path;
+        _isFailure = false;
+        await fetch(_url, path, (doc) => _document = doc);
+        print('downloadFileFromUrl SUCCESS');
+      }
+
+      if (message == FAILURE) {
+        _isFailure = true;
+        print('downloadFileFromUrl FAILURE');
+      }
+    });
+  }
+
+  static void pdfRunnable(PdfObject pdfObject) {
+    downloadFile(
+        url: pdfObject.url,
+        filename: pdfObject.filename,
+        isPrivate: pdfObject.isPrivate,
         onSuccess: (success, path) => {
-          _isFailure = !success,
-          _path = path,
-          print('downloadFileFromUrl SUCCESS $success $path'),
+          pdfObject
+            ..path = path
+            ..sendPort.send(SUCCESS)
         },
         onError: (error) => {
-          _isFailure = true,
-          print('downloadFileFromUrl FAILURE $_isFailure $error')
+          pdfObject.sendPort.send(FAILURE)
         });
   }
 

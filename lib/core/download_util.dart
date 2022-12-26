@@ -89,8 +89,9 @@ Future downloadFile({String url,
     bool isPrivate,
     Function(bool syccess, String path) onSuccess,
     Function(bool isError) onError}) async {
+  /// FIXME - permission checker seems broken, cause is called outside main isolate loop?
   var permissionReady = await _checkPermission();
-  if(permissionReady) {
+  if (permissionReady) {
     var cachedFile = await _saveIntoCacheMemory(
         url,
         keyName: filename,
